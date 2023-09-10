@@ -18,7 +18,7 @@ common warnings
 library
     import:           warnings
     exposed-modules:  CNix
-    build-depends:    base ^>=4.16.4.0
+    build-depends:    base >=4.14.3.0
     hs-source-dirs:   src
     default-language: Haskell2010
     pkgconfig-depends: nix-expr-c, nix-store-c
@@ -40,7 +40,7 @@ executable son-of-haskell-cnix-store-exe
     hs-source-dirs:   exe
     main-is:          Main.hs
     build-depends:
-        base ^>=4.16.4.0,
+        base >=4.14.3.0,
         son-of-haskell-cnix-store
 
 test-suite son-of-haskell-cnix-store-test
@@ -52,5 +52,5 @@ test-suite son-of-haskell-cnix-store-test
     hs-source-dirs:   test
     main-is:          Main.hs
     build-depends:
-        base ^>=4.16.4.0,
+        base >=4.14.3.0,
         son-of-haskell-cnix-store

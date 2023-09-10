@@ -2,8 +2,8 @@
   description = "Haskell-Nix interop";
 
   inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix.url = "github:tweag/nix/nix-c-bindings";
-    nixpkgs.follows = "nix/nixpkgs";
   };
 
   outputs = inputs@{ self, nix, nixpkgs, flake-utils, ... }:
