@@ -17,6 +17,8 @@
           buildInputs = with pkgs; [
             nix # from flake input
             pkg-config
+            cabal-install
+            ghc
           ];
         };
       });

@@ -1,4 +1,4 @@
-module MyLib where
+module CNix where
 
 import Foreign
 import Foreign.C

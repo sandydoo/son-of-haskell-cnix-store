@@ -4,7 +4,7 @@ import Control.Exception
 import Foreign.C
 import Foreign.Marshal.Alloc (allocaBytes)
 import Foreign.Ptr
-import MyLib
+import CNix
 
 main :: IO ()
 main = do
