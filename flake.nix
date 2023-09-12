@@ -19,6 +19,7 @@
             pkg-config
             cabal-install
             ghc
+            haskell-language-server
           ];
         };
       });
