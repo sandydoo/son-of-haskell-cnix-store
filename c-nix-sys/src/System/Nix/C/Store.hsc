@@ -3,7 +3,7 @@ module System.Nix.C.Store where
 import Foreign
 import Foreign.C
 
-import System.Nix.C.Util (Context)
+import System.Nix.C.Util (NixContext)
 
 #include "nix_api_store.h"
 
@@ -14,12 +14,12 @@ newtype Store = Store (Ptr NixStore)
 
 newtype StorePath = StorePath { unStorePath :: Ptr NixStorePath }
 
-foreign import ccall nix_libstore_init :: Ptr Context -> IO CInt
+foreign import ccall nix_libstore_init :: Ptr NixContext -> IO CInt
 
-foreign import ccall nix_init_plugins :: Ptr Context -> IO CInt
+foreign import ccall nix_init_plugins :: Ptr NixContext -> IO CInt
 
 foreign import ccall nix_store_open
-  :: Ptr Context
+  :: Ptr NixContext
   -> CString
   -> Ptr (Ptr CString)
   -> IO Store
@@ -27,14 +27,14 @@ foreign import ccall nix_store_open
 foreign import ccall nix_store_unref :: Store -> IO ()
 
 foreign import ccall nix_store_get_uri
-  :: Ptr Context
+  :: Ptr NixContext
   -> Store
   -> CString
   -> CUInt
   -> IO CInt
 
 foreign import ccall nix_store_parse_path
-  :: Ptr Context
+  :: Ptr NixContext
   -> Store
   -> CString
   -> IO StorePath
@@ -42,13 +42,13 @@ foreign import ccall nix_store_parse_path
 foreign import ccall nix_store_path_free :: StorePath -> IO ()
 
 foreign import ccall nix_store_is_valid_path
-  :: Ptr Context
+  :: Ptr NixContext
   -> Store
   -> StorePath
   -> IO CBool
 
 foreign import ccall nix_store_build
-  :: Ptr Context
+  :: Ptr NixContext
   -> Store
   -> StorePath
   -> Ptr ()
@@ -56,7 +56,7 @@ foreign import ccall nix_store_build
   -> IO CInt
 
 foreign import ccall nix_store_get_version
-  :: Ptr Context
+  :: Ptr NixContext
   -> Store
   -> CString
   -> CUInt

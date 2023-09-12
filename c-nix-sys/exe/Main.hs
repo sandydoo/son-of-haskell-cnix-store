@@ -91,7 +91,7 @@ releaseStore :: Either String CNix.Store -> IO ()
 releaseStore (Left _) = return ()
 releaseStore (Right store) = CNix.nix_store_unref store
 
-getErrMsg :: Ptr CNix.Context -> IO ()
+getErrMsg :: Ptr CNix.NixContext -> IO ()
 getErrMsg cdata = do
   let bufferSize = 1024
   allocaBytes bufferSize $ \ptr -> do
