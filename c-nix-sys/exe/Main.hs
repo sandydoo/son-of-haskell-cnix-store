@@ -13,7 +13,7 @@ main :: IO ()
 main = do
   putStrLn "Nix C API interop"
   putStrLn "Initializing libstore"
-  result <- CNix.nix_libstore_init
+  result <- CNix.nix_libstore_init nullPtr
   putStrLn $ "Initialized store. Return code: " ++ show result
 
   let uri = "daemon"

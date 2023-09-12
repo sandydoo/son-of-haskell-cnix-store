@@ -14,17 +14,50 @@ newtype Store = Store (Ptr NixStore)
 
 newtype StorePath = StorePath { unStorePath :: Ptr NixStorePath }
 
-foreign import ccall nix_libstore_init :: IO CInt
+foreign import ccall nix_libstore_init :: Ptr Context -> IO CInt
 
-foreign import ccall nix_store_open ::
-   Ptr Context -> CString -> Ptr (Ptr CString) -> IO Store
+foreign import ccall nix_init_plugins :: Ptr Context -> IO CInt
+
+foreign import ccall nix_store_open
+  :: Ptr Context
+  -> CString
+  -> Ptr (Ptr CString)
+  -> IO Store
 
 foreign import ccall nix_store_unref :: Store -> IO ()
 
-foreign import ccall nix_store_get_uri :: Ptr Context -> Store -> CString -> CUInt -> IO CInt
+foreign import ccall nix_store_get_uri
+  :: Ptr Context
+  -> Store
+  -> CString
+  -> CUInt
+  -> IO CInt
 
-foreign import ccall nix_store_get_version :: Ptr Context -> Store -> CString -> CUInt -> IO CInt
+foreign import ccall nix_store_parse_path
+  :: Ptr Context
+  -> Store
+  -> CString
+  -> IO StorePath
 
-foreign import ccall nix_store_parse_path :: Ptr Context -> Store -> CString -> IO StorePath
+foreign import ccall nix_store_path_free :: StorePath -> IO ()
 
-foreign import ccall nix_store_is_valid_path :: Ptr Context -> Store -> StorePath -> IO CBool
+foreign import ccall nix_store_is_valid_path
+  :: Ptr Context
+  -> Store
+  -> StorePath
+  -> IO CBool
+
+foreign import ccall nix_store_build
+  :: Ptr Context
+  -> Store
+  -> StorePath
+  -> Ptr ()
+  -> FunPtr (Ptr () -> CString -> CString -> IO ())
+  -> IO CInt
+
+foreign import ccall nix_store_get_version
+  :: Ptr Context
+  -> Store
+  -> CString
+  -> CUInt
+  -> IO CInt
