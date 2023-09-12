@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+
 module Main where
 
 import Control.Exception
@@ -49,11 +50,12 @@ checkIfValidPath store path = do
   putStrLn $ "Checking store path: " ++ path
   cdata <- CNix.nix_c_context_create
   storePath <- CNix.nix_store_parse_path cdata store =<< newCString path
-  if (CNix.unStorePath storePath) == nullPtr then do
-    getErrMsg cdata
-  else do
-    isValid <- CNix.nix_store_is_valid_path cdata store storePath
-    putStrLn $ path ++ " is " ++ if isValid == 1 then "valid" else "invalid"
+  if CNix.unStorePath storePath == nullPtr
+    then do
+      getErrMsg cdata
+    else do
+      isValid <- CNix.nix_store_is_valid_path cdata store storePath
+      putStrLn $ path ++ " is " ++ if isValid == 1 then "valid" else "invalid"
 
   CNix.nix_c_context_free cdata
 
@@ -77,14 +79,13 @@ openStore uri = do
   putStrLn $ "Error code: " ++ show code
 
   if code /= 0
-  then do
-    getErrMsg cdata
-    CNix.nix_c_context_free cdata
-    return (Left "Failed to open store")
-  else do
-    CNix.nix_c_context_free cdata
-    return (Right mstore)
-
+    then do
+      getErrMsg cdata
+      CNix.nix_c_context_free cdata
+      return (Left "Failed to open store")
+    else do
+      CNix.nix_c_context_free cdata
+      return (Right mstore)
 
 releaseStore :: Either String CNix.Store -> IO ()
 releaseStore (Left _) = return ()
@@ -94,7 +95,7 @@ getErrMsg :: Ptr CNix.Context -> IO ()
 getErrMsg cdata = do
   let bufferSize = 1024
   allocaBytes bufferSize $ \ptr -> do
-    _ <- CNix.nix_err_name nullPtr cdata ptr (fromIntegral bufferSize) 
+    _ <- CNix.nix_err_name nullPtr cdata ptr (fromIntegral bufferSize)
     errMsg <- peekCString =<< CNix.nix_err_msg nullPtr cdata nullPtr
     errName <- peekCString ptr
     putStrLn $ errName ++ ": " ++ errMsg

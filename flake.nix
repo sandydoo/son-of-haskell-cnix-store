@@ -13,7 +13,8 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         nix = inputs.nix.packages.${system}.default;
-      in {
+      in
+      {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             nix # from flake input
