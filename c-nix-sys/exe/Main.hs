@@ -11,7 +11,6 @@ import qualified System.Nix.C.Util as CNix
 
 main :: IO ()
 main = do
-  putStrLn "Nix C API interop"
   putStrLn "Initializing libstore"
   result <- CNix.nix_libstore_init nullPtr
   putStrLn $ "Initialized store. Return code: " ++ show result
@@ -19,22 +18,21 @@ main = do
   let uri = "daemon"
   putStrLn $ "Opening store: " ++ uri
 
-  bracket (openStore uri) releaseStore tryInteract
+  bracket (openStore uri) releaseStore interactWithStore
 
-tryInteract :: Either String CNix.Store -> IO ()
-tryInteract (Left err) = putStrLn err
-tryInteract (Right store) = do
+interactWithStore :: Either String CNix.Store -> IO ()
+interactWithStore (Left err) = putStrLn err
+interactWithStore (Right store) = do
   putStrLn "Fetching version"
 
   clientVersion <- peekCString =<< CNix.nix_version_get
-  mdaemonVersion <- getVersion store
+  putStrLn $ "Library version: " ++ clientVersion
 
+  mdaemonVersion <- getVersion store
   case mdaemonVersion of
     Just daemonVersion ->
       putStrLn $ "Daemon version: " ++ daemonVersion
     Nothing -> putStrLn "Failed to fetch daemon version"
-
-  putStrLn $ "Library version: " ++ clientVersion
 
   let notInStorePath = "/not/in/store/path"
   checkIfValidPath store notInStorePath
