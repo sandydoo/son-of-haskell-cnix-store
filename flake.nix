@@ -30,6 +30,7 @@
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
+              cabal-fmt.enable = true;
               nixpkgs-fmt.enable = true;
               ormolu.enable = true;
             };
