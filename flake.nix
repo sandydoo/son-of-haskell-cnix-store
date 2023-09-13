@@ -16,6 +16,8 @@
       in
       {
         devShells.default = pkgs.mkShell {
+          inherit (self.checks.${system}.pre-commit-check) shellHook;
+
           buildInputs = with pkgs; [
             nix # from flake input
             pkg-config
