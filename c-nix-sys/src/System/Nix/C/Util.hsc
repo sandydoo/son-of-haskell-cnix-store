@@ -35,6 +35,12 @@ foreign import ccall nix_setting_get
   -> CUInt
   -> CInt
 
+foreign import ccall nix_setting_set
+  :: Ptr NixContext
+  -> CString
+  -> CString
+  -> CInt
+
 foreign import ccall nix_version_get :: IO CString
 
 foreign import ccall nix_err_msg
